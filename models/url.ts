@@ -9,4 +9,6 @@ const schema = new mongoose.Schema({
   }
 });
 
-export const Url = mongoose.model('urls', schema);
+const Url = mongoose.model('urls', schema);
+
+export default Url;

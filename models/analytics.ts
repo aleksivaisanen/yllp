@@ -6,4 +6,6 @@ const schema = new mongoose.Schema({
   type: String, 
 });
 
-export const Analytics = mongoose.model('analytics', schema);
+const Analytics = mongoose.model('analytics', schema);
+
+export default Analytics;
