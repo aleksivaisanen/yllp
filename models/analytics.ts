@@ -6,12 +6,32 @@ interface IAnalytics {
   type: string;
 }
 
-const schema = new mongoose.Schema<IAnalytics>({ 
-  slug: String, 
-  visitDate: Date,
-  type: String, 
-}, { timestamps: true });
+const schema = new mongoose.Schema<IAnalytics>(
+  {
+    slug: {
+      type: String,
+      required: true,
+    },
+    visitDate: Date,
+    type: String,
+  },
+  {
+    timestamps: true,
+    toJSON: {
+      transform: function (doc, ret) {
+        delete ret._id;
+        delete ret.createdAt;
+        delete ret.updatedAt;
+        delete ret.__v;
+      },
+    },
+  }
+);
 
-const Analytics = mongoose.model('analytics', schema);
+schema.pre("validate", function (next) {
+  // Mark the visit date timestamp
+  this.visitDate = new Date();
+  next();
+});
 
-export default Analytics;
+export default mongoose.models.analytics || mongoose.model("analytics", schema);

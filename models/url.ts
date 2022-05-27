@@ -17,7 +17,17 @@ const schema = new mongoose.Schema<IUrl>(
       required: true,
     },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+    toJSON: {
+      transform: function (doc, ret) {
+        delete ret._id;
+        delete ret.createdAt;
+        delete ret.updatedAt;
+        delete ret.__v;
+      },
+    },
+  }
 );
 
 schema.pre("validate", function (next) {
@@ -26,6 +36,4 @@ schema.pre("validate", function (next) {
   next();
 });
 
-const Url = mongoose.model("urls", schema);
-
-export default Url;
+export default mongoose.models.urls || mongoose.model("urls", schema);
