@@ -12,6 +12,38 @@ type AnalyticsResponse = {
   }[];
 };
 
+export const getAnalyticsData = async ({
+  slug,
+  startDate,
+  endDate,
+}: {
+  slug: string;
+  startDate: string;
+  endDate: string;
+}) => {
+  const url = await Url.findOne({ slug });
+
+  // Aggregate visit analytics to return visits per day
+  const aggregatedAnalytics = await Analytics.aggregate([
+    {
+      $project: {
+        formattedVisitDate: {
+          $dateToString: { format: "%Y-%m-%d", date: "$visitDate" },
+        },
+      },
+    },
+    { $match: { formattedVisitDate: { $gte: startDate, $lte: endDate } } },
+    {
+      $group: {
+        _id: "$formattedVisitDate",
+        visits: { $sum: 1 },
+      },
+    },
+  ]);
+
+  return { url, aggregatedAnalytics };
+};
+
 export const handler = async (
   req: NextApiRequest,
   res: NextApiResponse<AnalyticsResponse | Message>
@@ -32,6 +64,7 @@ export const handler = async (
       return;
     }
 
+    // Hardcoded fallback values to get all results
     if (!_startDate) startDate = "2022-01-01";
     if (!_endDate) {
       const today = new Date().toISOString().split("T")[0];
@@ -45,30 +78,16 @@ export const handler = async (
       return;
     }
 
-    const url = await Url.findOne({ slug });
+    const { url, aggregatedAnalytics } = await getAnalyticsData({
+      slug: slug as string,
+      startDate: startDate as string,
+      endDate: endDate as string,
+    });
 
     if (!url) {
       res.status(404).send({ message: "URL not found!" });
       return;
     }
-
-    // Aggregate visit analytics to return visits per day
-    const aggregatedAnalytics = await Analytics.aggregate([
-      {
-        $project: {
-          formattedVisitDate: {
-            $dateToString: { format: "%Y-%m-%d", date: "$visitDate" },
-          },
-        },
-      },
-      { $match: { formattedVisitDate: { $gte: startDate, $lte: endDate } } },
-      {
-        $group: {
-          _id: "$formattedVisitDate",
-          visits: { $sum: 1 },
-        },
-      },
-    ]);
 
     const response: AnalyticsResponse = {
       originalUrl: url.originalUrl,
