@@ -134,6 +134,8 @@ const deleteAnalytics = async (
     return;
   }
 
+  await connectToDatabase();
+
   await Url.deleteOne({ slug });
   await Analytics.deleteMany({ slug });
 
