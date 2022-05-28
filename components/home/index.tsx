@@ -8,9 +8,11 @@ const HomePage = () => {
   const [url, setUrl] = useState("");
   const [urlValidationError, setUrlValidationError] = useState("");
   const [shortenedUrlData, setShortenedUrlData] = useState<IUrl>();
+  const [loading, setLoading] = useState(false);
 
   const generateLink = async () => {
     try {
+      setLoading(true);
       const requestBody = {
         url,
       };
@@ -25,6 +27,7 @@ const HomePage = () => {
 
       const data = await response.json();
       setShortenedUrlData(data);
+      setLoading(false);
     } catch (error) {
       console.error(error);
     }
@@ -32,16 +35,20 @@ const HomePage = () => {
 
   return (
     <div className="wrapper">
-      <h1 className="heading1 text-center">YLLP - Simple link shortening service</h1>
-      <p className="body text-center">Insert URL you want to be shortened below</p>
+      <h1 className="heading1 text-center">
+        YLLP - Simple link shortening service
+      </h1>
+      <p className="body text-center">
+        Insert URL you want to be shortened below
+      </p>
       <UrlInput
         url={url}
         setUrl={setUrl}
         error={urlValidationError}
         setError={setUrlValidationError}
       />
-      <Button disabled={!!urlValidationError} onClick={generateLink}>
-        Generate link
+      <Button disabled={!!urlValidationError || loading} onClick={generateLink}>
+        {loading ? "Loading..." : "Generate link"}
       </Button>
       <ShortenedLinkResult {...shortenedUrlData} />
       <style jsx>{`

@@ -1,11 +1,14 @@
 import Button from "components/global/Button";
 import { useRouter } from "next/router";
+import { useState } from "react";
 
 const DeleteButtonLink = ({ slug }: { slug: string }) => {
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
 
   const deleteLink = async (slug: string) => {
     try {
+      setLoading(true);
       const response = await fetch(`/api/v1/analytics/${slug}`, {
         method: "DELETE",
         headers: {
@@ -18,6 +21,7 @@ const DeleteButtonLink = ({ slug }: { slug: string }) => {
         alert("Deletion successful!");
         router.push("/");
       }
+      setLoading(false);
     } catch (error) {
       console.error(error);
     }
@@ -25,8 +29,12 @@ const DeleteButtonLink = ({ slug }: { slug: string }) => {
 
   return (
     <>
-      <Button className="danger-button" onClick={() => deleteLink(slug)}>
-        Delete link
+      <Button
+        disabled={loading}
+        className="danger-button"
+        onClick={() => deleteLink(slug)}
+      >
+        {loading ? "Loading..." : "Delete link"}
       </Button>
       <style jsx global>
         {`
