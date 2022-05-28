@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-interface IAnalytics {
+export interface IAnalytics {
   slug: string;
   visitDate: Date;
   type: string;
