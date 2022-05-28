@@ -7,13 +7,19 @@ import type { AnalyticsResponse } from "pages/api/v1/analytics/[slug]";
 const Analytics = ({
   analyticsData,
   shortUrl,
+  slug,
 }: {
   analyticsData: AnalyticsResponse;
   shortUrl: string;
+  slug: string;
 }) => {
   return (
     <BaseLayout title="YLLT - Analytics">
-      <AnalyticsPage analyticsData={analyticsData} shortUrl={shortUrl} />
+      <AnalyticsPage
+        analyticsData={analyticsData}
+        shortUrl={shortUrl}
+        slug={slug}
+      />
     </BaseLayout>
   );
 };
@@ -52,6 +58,7 @@ export const getServerSideProps: GetServerSideProps = async ({
         analytics: analyticsData.aggregatedAnalytics,
       },
       shortUrl: `${host}/${analyticsData.url.slug}`,
+      slug: analyticsData.url.slug,
     },
   };
 };

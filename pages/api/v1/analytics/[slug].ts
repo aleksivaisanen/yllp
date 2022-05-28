@@ -137,7 +137,7 @@ const deleteAnalytics = async (
   await Url.deleteOne({ slug });
   await Analytics.deleteMany({ slug });
 
-  res.status(200).send({ message: "Deletion successful" });
+  res.status(200).send({ message: "Success" });
   return;
 };
 

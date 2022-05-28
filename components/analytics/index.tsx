@@ -1,12 +1,19 @@
 import type { AnalyticsResponse } from "pages/api/v1/analytics/[slug]";
-import Table, { TableRow, TableHeading } from "components/global/Table";
+import Table, {
+  TableRow,
+  TableHeading,
+  TableData,
+} from "components/global/Table";
+import DeleteButtonLink from "./DeleteLinkButton.tsx";
 
 const AnalyticsPage = ({
   analyticsData,
   shortUrl,
+  slug,
 }: {
-  analyticsData?: AnalyticsResponse;
-  shortUrl?: string;
+  analyticsData: AnalyticsResponse;
+  shortUrl: string;
+  slug: string;
 }) => {
   const tableHeadings: TableHeading[] = [
     { key: "date", label: "Date" },
@@ -24,11 +31,19 @@ const AnalyticsPage = ({
     rows: tableRows,
   };
 
+  const renderAnalyticsTable = (data: TableData) => {
+    if (data?.rows?.length) {
+      return <Table data={tableData} />;
+    }
+    return <p className="body">No analytics data found!</p>;
+  };
+
   return (
     <div className="wrapper">
       <h1 className="heading1">Analytics</h1>
-      <p className="caption analytics-caption">URL: {shortUrl}</p>
-      <Table data={tableData} />
+      <p className="caption">URL: {shortUrl}</p>
+      <DeleteButtonLink slug={slug} />
+      {renderAnalyticsTable(tableData)}
       <style jsx>{`
         .wrapper {
           display: flex;
@@ -38,10 +53,6 @@ const AnalyticsPage = ({
           min-height: 400px;
           max-width: 28rem;
           width: 100%;
-        }
-
-        .analytics-caption {
-          margin-bottom: 2rem;
         }
       `}</style>
     </div>

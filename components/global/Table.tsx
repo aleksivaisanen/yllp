@@ -7,12 +7,14 @@ export type TableRow = {
   [key: string]: string | number;
 };
 
+export type TableData = {
+  headings: TableHeading[];
+  rows: Array<TableRow>;
+};
+
 type TableProps = {
   className?: string;
-  data: {
-    headings: TableHeading[];
-    rows: Array<TableRow>;
-  };
+  data: TableData;
 };
 
 const renderHeadings = (headings: TableHeading[]) =>

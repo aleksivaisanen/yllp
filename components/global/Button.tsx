@@ -31,7 +31,7 @@ const Button = ({
         }
 
         button:hover {
-          background-color: var(--primary-dark);
+          opacity: 0.8;
           cursor: pointer;
         }
 
