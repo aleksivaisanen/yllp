@@ -4,7 +4,7 @@ import HomePage from "components/home";
 
 const Home: NextPage = () => {
   return (
-    <BaseLayout title="YLLT - Home">
+    <BaseLayout title="YLLP - Home">
       <HomePage />
     </BaseLayout>
   );

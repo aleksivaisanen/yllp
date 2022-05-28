@@ -14,7 +14,7 @@ const Analytics = ({
   slug: string;
 }) => {
   return (
-    <BaseLayout title="YLLT - Analytics">
+    <BaseLayout title="YLLP - Analytics">
       <AnalyticsPage
         analyticsData={analyticsData}
         shortUrl={shortUrl}
