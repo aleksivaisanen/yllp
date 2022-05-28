@@ -11,22 +11,23 @@ export const yyyymmddValidator = (date: string) => {
   return validationPattern.test(date);
 };
 
-
-  
 /**
  * Checks Url validity
- * source: https://stackoverflow.com/questions/5717093/check-if-a-javascript-string-is-a-url 
+ * source: https://stackoverflow.com/questions/5717093/check-if-a-javascript-string-is-a-url
  * @param url url to be validated
  * @returns boolean value of validity check
  */
-  export const isValidHttpUrl = (url: string) => {
-    let _url;
+export const isValidHttpUrl = (url: string) => {
+  let _url;
 
-    try {
-      _url = new URL(url);
-    } catch (_) {
-      return false;
-    }
+  try {
+    _url = new URL(url);
+  } catch (_) {
+    return false;
+  }
 
-    return _url.protocol === "http:" || _url.protocol === "https:";
-  };
+  return _url.protocol === "http:" || _url.protocol === "https:";
+};
+
+export const currentUrl =
+  typeof window === "undefined" ? "" : window?.location?.href;

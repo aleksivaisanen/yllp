@@ -4,7 +4,7 @@ import Analytics from "models/analytics";
 import Url from "models/url";
 import { yyyymmddValidator as validate } from "utils/functions";
 
-type AnalyticsResponse = {
+export type AnalyticsResponse = {
   originalUrl: string;
   analytics: {
     _id: string;
@@ -18,9 +18,12 @@ export const getAnalyticsData = async ({
   endDate,
 }: {
   slug: string;
-  startDate: string;
-  endDate: string;
+  startDate?: string;
+  endDate?: string;
 }) => {
+  
+  await connectToDatabase();
+
   const url = await Url.findOne({ slug });
 
   // Aggregate visit analytics to return visits per day
@@ -53,8 +56,6 @@ export const handler = async (
       res.status(405).send({ message: "Only GET requests allowed!" });
       return;
     }
-
-    await connectToDatabase();
 
     let startDate, endDate;
     const { slug, startDate: _startDate, endDate: _endDate } = req?.query || {};
