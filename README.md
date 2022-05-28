@@ -1,6 +1,8 @@
 # YLLP - Yksinkertainen linkinlyhennyspalvelu 
 Simple link shortening service created with Next.JS, TypeScript and MongoDB.
 
+[Running demo](https://yllp.vercel.app/)
+
 [API documentation](pages/api/v1/apiDocumentation.md)
 
 ## Features
