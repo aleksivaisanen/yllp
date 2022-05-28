@@ -24,7 +24,8 @@ const TextInput = ({ className, error, onChange, value }: TextInputType) => {
       <style jsx>{`
         input {
           padding: 0.5rem;
-          min-width: 24rem;
+          max-width: 24rem;
+          width: 100%;
         }
       `}</style>
     </>

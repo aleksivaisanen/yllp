@@ -40,8 +40,8 @@ const AnalyticsPage = ({
 
   return (
     <div className="wrapper">
-      <h1 className="heading1">Analytics</h1>
-      <p className="caption">URL: {shortUrl}</p>
+      <h1 className="heading1 text-center">Analytics</h1>
+      <p className="caption text-center">URL: {shortUrl}</p>
       <DeleteButtonLink slug={slug} />
       {renderAnalyticsTable(tableData)}
       <style jsx>{`

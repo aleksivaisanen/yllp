@@ -32,8 +32,8 @@ const HomePage = () => {
 
   return (
     <div className="wrapper">
-      <h1 className="heading1">YLLP - Simple link shortening service</h1>
-      <p className="body">Insert URL you want to be shortened below</p>
+      <h1 className="heading1 text-center">YLLP - Simple link shortening service</h1>
+      <p className="body text-center">Insert URL you want to be shortened below</p>
       <UrlInput
         url={url}
         setUrl={setUrl}
