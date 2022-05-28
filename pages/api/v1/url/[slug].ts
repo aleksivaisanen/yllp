@@ -3,6 +3,19 @@ import connectToDatabase from "utils/database";
 import Url, { IUrl } from "models/url";
 import Analytics from "models/analytics";
 
+export const getUrlData = async (slug: string, redirect: string) => {
+  await connectToDatabase();
+
+  const url = await Url.findOne({ slug });
+
+  if (redirect && url) {
+    // User is using this API to get redirected, create new analytics document
+    await Analytics.create({ slug, type: "redirect" });
+  }
+
+  return url;
+};
+
 export const handler = async (
   req: NextApiRequest,
   res: NextApiResponse<IUrl | Message>
@@ -13,8 +26,6 @@ export const handler = async (
       return;
     }
 
-    await connectToDatabase();
-
     const { slug, redirect } = req?.query || {};
 
     if (!slug) {
@@ -22,16 +33,11 @@ export const handler = async (
       return;
     }
 
-    const url = await Url.findOne({ slug });
+    const url = await getUrlData(slug as string, redirect as string);
 
     if (!url) {
       res.status(404).send({ message: "URL not found!" });
       return;
-    }
-
-    if (redirect) {
-      // User is using this API to get redirected, create new analytics document
-      await Analytics.create({ slug, type: "redirect" });
     }
 
     res.status(200).json(url);

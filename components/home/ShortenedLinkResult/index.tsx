@@ -1,7 +1,8 @@
 import { IUrl } from "models/url";
 
 const ShortenedLinkResult = ({ originalUrl, slug }: Partial<IUrl>) => {
-  const currentUrl = window.location.href;
+  const currentUrl =
+    typeof window === "undefined" ? "" : window?.location?.href;
   const shortenedUrl = `${currentUrl}${slug}`;
   const analyticsUrl = `${currentUrl}analytics/${slug}`;
 
