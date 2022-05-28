@@ -36,4 +36,4 @@ schema.pre("validate", function (next) {
   next();
 });
 
-export default mongoose.models.urls || mongoose.model("urls", schema);
+export default mongoose?.models?.urls || mongoose.model("urls", schema);

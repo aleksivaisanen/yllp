@@ -1,6 +1,4 @@
 import mongoose from "mongoose";
-import dotenv from "dotenv";
-dotenv.config();
 
 /**
  * Database utility to find an already open connection, otherwise open a new connection

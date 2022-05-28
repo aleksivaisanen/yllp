@@ -34,4 +34,5 @@ schema.pre("validate", function (next) {
   next();
 });
 
-export default mongoose.models.analytics || mongoose.model("analytics", schema);
+export default mongoose?.models?.analytics ||
+  mongoose.model("analytics", schema);
