@@ -14,7 +14,11 @@ export type AnalyticsResponse = {
     visits: number;
   }[];
 };
-
+/**
+ * Function for fetching Analytics data from database
+ * @param param object containing slug, startDate and endDate
+ * @returns Array of Analytics data
+ */
 export const getAnalyticsData = async ({
   slug,
   startDate,
@@ -69,47 +73,90 @@ export const getAnalyticsData = async ({
   return { url, aggregatedAnalytics };
 };
 
+/**
+ * GET route for analytics
+ * @param req
+ * @param res
+ * @returns Analytics document from database
+ */
+const getAnalytics = async (
+  req: NextApiRequest,
+  res: NextApiResponse<AnalyticsResponse | Message>
+) => {
+  const { slug, startDate, endDate } = req?.query || {};
+
+  if (!slug) {
+    res.status(400).send({ message: "slug missing from request query!" });
+    return;
+  }
+
+  if (!validate(startDate as string) || !validate(endDate as string)) {
+    res
+      .status(400)
+      .send({ message: "Invalid startDate or endDate in request query!" });
+    return;
+  }
+
+  const { url, aggregatedAnalytics } = await getAnalyticsData({
+    slug: slug as string,
+    startDate: startDate as string,
+    endDate: endDate as string,
+  });
+
+  if (!url) {
+    res.status(404).send({ message: "URL not found!" });
+    return;
+  }
+
+  const response: AnalyticsResponse = {
+    originalUrl: url.originalUrl,
+    analytics: aggregatedAnalytics,
+  };
+
+  res.status(200).json(response);
+  return;
+};
+
+/**
+ * DELETE route for analytics
+ * @param req
+ * @param res
+ * @returns object with message about successful/failed deletion
+ */
+const deleteAnalytics = async (
+  req: NextApiRequest,
+  res: NextApiResponse<Message>
+) => {
+  const { slug } = req?.query || {};
+
+  if (!slug) {
+    res.status(400).send({ message: "slug missing from request query!" });
+    return;
+  }
+
+  await Url.deleteOne({ slug });
+  await Analytics.deleteMany({ slug });
+
+  res.status(200).send({ message: "Deletion successful" });
+  return;
+};
+
 export const handler = async (
   req: NextApiRequest,
   res: NextApiResponse<AnalyticsResponse | Message>
 ) => {
   try {
-    if (req.method !== "GET") {
-      res.status(405).send({ message: "Only GET requests allowed!" });
+    if (req.method === "GET") {
+      await getAnalytics(req, res);
       return;
     }
 
-    const { slug, startDate, endDate } = req?.query || {};
-
-    if (!slug) {
-      res.status(400).send({ message: "slug missing from request query!" });
+    if (req.method === "DELETE") {
+      await deleteAnalytics(req, res);
       return;
     }
 
-    if (!validate(startDate as string) || !validate(endDate as string)) {
-      res
-        .status(400)
-        .send({ message: "Invalid startDate or endDate in request query!" });
-      return;
-    }
-
-    const { url, aggregatedAnalytics } = await getAnalyticsData({
-      slug: slug as string,
-      startDate: startDate as string,
-      endDate: endDate as string,
-    });
-
-    if (!url) {
-      res.status(404).send({ message: "URL not found!" });
-      return;
-    }
-
-    const response: AnalyticsResponse = {
-      originalUrl: url.originalUrl,
-      analytics: aggregatedAnalytics,
-    };
-
-    res.status(200).json(response);
+    res.status(405).send({ message: "Only GET or DELETE requests allowed!" });
     return;
   } catch (error) {
     console.error(error);
