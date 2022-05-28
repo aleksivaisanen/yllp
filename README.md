@@ -1,7 +1,7 @@
 # YLLP - Yksinkertainen linkinlyhennyspalvelu 
 Simple link shortening service created with Next.JS, TypeScript and MongoDB.
 
-[API documentation](apiDocumentation.md)
+[API documentation](pages/api/v1/apiDocumentation.md)
 
 ## Features
 - User can input an URL to be shortened
