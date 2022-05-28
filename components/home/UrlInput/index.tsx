@@ -1,14 +1,14 @@
 import TextInput from "../../global/TextInput";
 import { isValidHttpUrl } from "utils/functions";
-import { useState } from "react";
 
 type UrlInput = {
-  url: string;
+  error: string;
+  setError: (error: string) => void;
   setUrl: (url: string) => void;
+  url: string;
 };
 
-const UrlInput = ({ url, setUrl }: UrlInput) => {
-  const [error, setError] = useState("");
+const UrlInput = ({ error, setError, url, setUrl }: UrlInput) => {
 
   const validateUrl = (url: string) => {
     if (!isValidHttpUrl(url)) {

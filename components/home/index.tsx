@@ -1,13 +1,30 @@
 import UrlInput from "./UrlInput";
 import { useState } from "react";
 import Button from "components/global/Button";
+import { IUrl } from "models/url";
+import ShortenedLinkResult from "./ShortenedLinkResult";
 
 const HomePage = () => {
   const [url, setUrl] = useState("");
+  const [urlValidationError, setUrlValidationError] = useState("");
+  const [shortenedUrlData, setShortenedUrlData] = useState<IUrl>();
 
   const generateLink = async () => {
     try {
-      // generate link
+      const requestBody = {
+        url,
+      };
+
+      const response = await fetch("/api/v1/shorten", {
+        method: "POST",
+        body: JSON.stringify(requestBody),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const data = await response.json();
+      setShortenedUrlData(data);
     } catch (error) {
       console.error(error);
     }
@@ -17,8 +34,16 @@ const HomePage = () => {
     <div className="wrapper">
       <h1 className="heading1">YLLP - Simple link shortening service</h1>
       <p className="body">Insert URL you want to be shortened below</p>
-      <UrlInput url={url} setUrl={setUrl} />
-      <Button onClick={generateLink}>Generate link</Button>
+      <UrlInput
+        url={url}
+        setUrl={setUrl}
+        error={urlValidationError}
+        setError={setUrlValidationError}
+      />
+      <Button disabled={!!urlValidationError} onClick={generateLink}>
+        Generate link
+      </Button>
+      <ShortenedLinkResult {...shortenedUrlData} />
       <style jsx>{`
         .wrapper {
           display: flex;

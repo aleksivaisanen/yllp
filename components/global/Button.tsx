@@ -1,13 +1,23 @@
 type ButtonType = {
   children: JSX.Element | string;
   className?: string;
+  disabled?: boolean;
   onClick: () => void;
 };
 
-const Button = ({ children, className, onClick }: ButtonType) => {
+const Button = ({
+  children,
+  className,
+  disabled = false,
+  onClick,
+}: ButtonType) => {
   return (
     <>
-      <button className={className} onClick={() => onClick()}>
+      <button
+        className={className}
+        onClick={() => onClick()}
+        disabled={disabled}
+      >
         {children}
       </button>
       <style jsx>{`
@@ -23,6 +33,13 @@ const Button = ({ children, className, onClick }: ButtonType) => {
         button:hover {
           background-color: var(--primary-dark);
           cursor: pointer;
+        }
+
+        button:disabled,
+        button[disabled] {
+          background-color: var(--background);
+          color: var(--white);
+          cursor: auto;
         }
       `}</style>
     </>

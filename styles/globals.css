@@ -18,11 +18,6 @@ body {
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
 * {
   box-sizing: border-box;
 }
@@ -31,6 +26,16 @@ a {
 h1,
 p {
   margin: 0.5rem;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--primary-dark);
+  text-decoration: underline;
 }
 
 .heading1 {
