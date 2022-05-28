@@ -50,7 +50,8 @@ const Table = ({
           border-collapse: separate;
           text-indent: initial;
           border-spacing: 0;
-          min-width: 24rem;
+          max-width: 28rem;
+          width: 100%;
         }
 
         .table th,

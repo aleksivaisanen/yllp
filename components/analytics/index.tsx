@@ -36,6 +36,8 @@ const AnalyticsPage = ({
           align-items: center;
           justify-content: center;
           min-height: 400px;
+          max-width: 28rem;
+          width: 100%;
         }
 
         .analytics-caption {
