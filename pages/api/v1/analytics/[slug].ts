@@ -7,7 +7,10 @@ import { yyyymmddValidator as validate } from "utils/functions";
 export type AnalyticsResponse = {
   originalUrl: string;
   analytics: {
-    _id: string;
+    _id: {
+      date: string;
+      slug: string;
+    };
     visits: number;
   }[];
 };
