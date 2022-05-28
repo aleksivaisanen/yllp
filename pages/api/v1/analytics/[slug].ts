@@ -24,11 +24,18 @@ export const handler = async (
 
     await connectToDatabase();
 
-    const { slug, startDate, endDate } = req?.query || {};
+    let startDate, endDate;
+    const { slug, startDate: _startDate, endDate: _endDate } = req?.query || {};
 
     if (!slug) {
       res.status(400).send({ message: "slug missing from request query!" });
       return;
+    }
+
+    if (!_startDate) startDate = "2022-01-01";
+    if (!_endDate) {
+      const today = new Date().toISOString().split("T")[0];
+      endDate = today;
     }
 
     if (!validate(startDate as string) || !validate(endDate as string)) {
