@@ -1,3 +1,15 @@
+:root {
+  /* color variables */
+  --black: #060606;
+  --gray: #4d4d4d;
+  --background: #e6e6e6;
+  --white: #fff;
+  --error: #d90000;
+  --danger: #ddb000;
+  --primary: #006bdd;
+  --primary-dark: #024c9b;
+}
+
 html,
 body {
   padding: 0;
@@ -13,4 +25,25 @@ a {
 
 * {
   box-sizing: border-box;
+}
+
+/* typography styles */
+h1,
+p {
+  margin: 0.5rem;
+}
+
+.heading1 {
+  font-size: 2rem;
+  color: var(--black);
+}
+
+.body {
+  font-size: 1rem;
+  color: var(--black);
+}
+
+.caption {
+  font-size: 0.875rem;
+  color: var(--gray);
 }
