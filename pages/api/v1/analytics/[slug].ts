@@ -21,10 +21,11 @@ export const getAnalyticsData = async ({
   startDate?: string;
   endDate?: string;
 }) => {
-  
   await connectToDatabase();
 
   const url = await Url.findOne({ slug });
+
+  const today = new Date().toISOString().split("T")[0];
 
   // Aggregate visit analytics to return visits per day
   const aggregatedAnalytics = await Analytics.aggregate([
@@ -33,12 +34,30 @@ export const getAnalyticsData = async ({
         formattedVisitDate: {
           $dateToString: { format: "%Y-%m-%d", date: "$visitDate" },
         },
+        slug: {
+          $toString: "$slug",
+        },
       },
     },
-    { $match: { formattedVisitDate: { $gte: startDate, $lte: endDate } } },
+    {
+      $match: {
+        $and: [
+          {
+            formattedVisitDate: {
+              $gte: startDate ?? "2022-01-02",
+              $lte: endDate ?? today,
+            },
+          },
+          { slug: slug },
+        ],
+      },
+    },
     {
       $group: {
-        _id: "$formattedVisitDate",
+        _id: {
+          slug: "$slug",
+          date: "$formattedVisitDate",
+        },
         visits: { $sum: 1 },
       },
     },
@@ -57,19 +76,11 @@ export const handler = async (
       return;
     }
 
-    let startDate, endDate;
-    const { slug, startDate: _startDate, endDate: _endDate } = req?.query || {};
+    const { slug, startDate, endDate } = req?.query || {};
 
     if (!slug) {
       res.status(400).send({ message: "slug missing from request query!" });
       return;
-    }
-
-    // Hardcoded fallback values to get all results
-    if (!_startDate) startDate = "2022-01-01";
-    if (!_endDate) {
-      const today = new Date().toISOString().split("T")[0];
-      endDate = today;
     }
 
     if (!validate(startDate as string) || !validate(endDate as string)) {
