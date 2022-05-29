@@ -22,7 +22,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
     return homePageRedirect;
   }
 
-  const { originalUrl } = await getUrlData(slug as string, "true");
+  const { originalUrl } = (await getUrlData(slug as string, "true")) || {};
 
   if (!originalUrl) {
     return homePageRedirect;

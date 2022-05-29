@@ -1,6 +1,6 @@
 # How to use the API
 
-## Endpoint: api/v1/shorten
+## Endpoint: api/v1/shorten (POST)
 
 API for getting shortened URLs.
 
@@ -31,7 +31,7 @@ curl --location --request POST 'localhost:3000/api/v1/shorten' \
 }'
 ```
 
-## Endpoint: api/v1/analytics/[slug]
+## Endpoint: api/v1/analytics/[slug] (GET)
 
 API for getting analytics data based on shortened URL slug.
 
@@ -63,7 +63,26 @@ cURL example
 curl --location --request GET 'localhost:3000/api/v1/analytics/07lzxfcn?startDate=2022-05-27&endDate=2022-05-28'
 ```
 
-## Endpoint: api/v1/url/[slug]
+## Endpoint: api/v1/analytics/[slug] (DELETE)
+
+API for deleting shortened URL and Analytics documents based on slug.
+
+Request type: **DELETE**  
+
+Returns
+```
+{
+    "message": "Success"
+}
+```
+
+cURL example
+
+```
+curl --location --request DELETE 'localhost:3000/api/v1/analytics/07lzxfcn'
+```
+
+## Endpoint: api/v1/url/[slug] (GET)
 
 API for getting shortened URL data and creating Analytics document for that URL.
 
